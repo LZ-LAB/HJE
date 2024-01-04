@@ -1,8 +1,5 @@
 # -- coding: utf-8 --
-# @Time: 2022-10-20 16:03
-# @Author: WangCx
-# @File: data_process
-# @Project: hyperformer
+
 import numpy as np
 from collections import defaultdict
 import x2ms_adapter
