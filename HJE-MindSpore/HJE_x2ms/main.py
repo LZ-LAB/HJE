@@ -1,3 +1,5 @@
+# -- coding: utf-8 --
+
 import mindspore
 import mindspore.context as context
 import x2ms_adapter
@@ -14,11 +16,11 @@ if not x2ms_context.is_context_init:
     context.set_context(mode=context.PYNATIVE_MODE, pynative_synchronize=True)
     x2ms_context.is_context_init = True
 from data_process import Data
-from model import HyConvE
+from model import HJE
 import numpy as np
 import argparse
 import time
-device = x2ms_adapter.Device('cuda:2')
+device = x2ms_adapter.Device('cuda:1' if x2ms_adapter.is_cuda_available() else 'cpu')
 
 class Experiment:
     def __init__(self, num_iterations, batch_size, lr, dr, dembd, dembd1, max_ary):
@@ -103,7 +105,7 @@ class Experiment:
 
     def train_and_eval(self):
 
-        model = HyConvE(len(d.ent2id), len(d.rel2id), self.dembd, self.dembd1, self.max_ary, self.device)
+        model = HJE(len(d.ent2id), len(d.rel2id), self.dembd, self.dembd1, self.max_ary, self.device)
         x2ms_adapter.to(model, device)
         opt = optim_register.adam(x2ms_adapter.parameters(model), lr=self.lr)
         if self.dr:
@@ -151,7 +153,7 @@ class Experiment:
                         self.set_output(data_batch, ent_idx, label, loss, pred, rel_idx)
                         return loss
                     
-                    wrapped_model = WithLossCell(train_obj=self, construct=construct, key='times_0')
+                    wrapped_model = WithLossCell(train_obj=self, construct=construct, key='times_2')
                     wrapped_model = x2ms_adapter.train_one_step_cell(wrapped_model, optim_register.get_instance())
                     for j in range(0, len(er_vocab_pairs), self.batch_size):
                         try:
@@ -240,11 +242,11 @@ class Experiment:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, default="WikiPeople", nargs="?", help="FB-AUTO/JF17K/WikiPeople/WN18/FB15k.")
-    parser.add_argument("--num_iterations", type=int, default=300, nargs="?", help="Number of iterations.")
-    parser.add_argument("--batch_size", type=int, default=256, nargs="?", help="Batch size.")
+    parser.add_argument("--dataset", type=str, default="FB-AUTO", nargs="?", help="FB-AUTO/JF17K/WikiPeople/WN18RR/FB15K-237.")
+    parser.add_argument("--num_iterations", type=int, default=1000, nargs="?", help="Number of iterations.")
+    parser.add_argument("--batch_size", type=int, default=128, nargs="?", help="Batch size.")
     parser.add_argument("--lr", type=float, default=0.0005, nargs="?", help="Learning rate.")
-    parser.add_argument("--dr", type=float, default=0.995, nargs="?", help="Decay rate.")
+    parser.add_argument("--dr", type=float, default=0.99, nargs="?", help="Decay rate.")
     parser.add_argument("--dembed", type=int, default=400, nargs="?")
     parser.add_argument("--dembed1", type=int, default=50, nargs="?")
 
@@ -252,10 +254,18 @@ if __name__ == '__main__':
     parser.add_argument("--valid_patience", type=int, default=50, nargs="?", help="Valid patience.")
     parser.add_argument("-ary", "--ary_list", type=int, action='append', help="List of arity for train and test")
     args = parser.parse_args()
+
+
+    ### 2-ary数据集设置，例如WN18RR/FB15K-237
     # args.ary_list = [2]
-    # args.ary_list = [2, 4, 5]
-    args.ary_list = [2, 3, 4, 5, 6, 7, 8, 9]
-    # args.ary_list = [3]
+    
+    ### n-ary数据集设置，例如FB-AUTO/JF17K/WikiPeople
+    ## JF17K
+    # args.ary_list = [2, 3, 4, 5, 6]
+    ## WikiPeople
+    # args.ary_list = [2, 3, 4, 5, 6, 7, 8, 9]
+    ## FB-AUTO
+    args.ary_list = [2, 4, 5]
 
     param = {}
     param['dataset'] = args.dataset
