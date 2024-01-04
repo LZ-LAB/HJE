@@ -20,7 +20,7 @@ from model import HJE
 import numpy as np
 import argparse
 import time
-device = x2ms_adapter.Device('cuda:1' if x2ms_adapter.is_cuda_available() else 'cpu')
+device = x2ms_adapter.Device('cuda:0' if x2ms_adapter.is_cuda_available() else 'cpu')
 
 class Experiment:
     def __init__(self, num_iterations, batch_size, lr, dr, dembd, dembd1, max_ary):
@@ -153,7 +153,7 @@ class Experiment:
                         self.set_output(data_batch, ent_idx, label, loss, pred, rel_idx)
                         return loss
                     
-                    wrapped_model = WithLossCell(train_obj=self, construct=construct, key='times_2')
+                    wrapped_model = WithLossCell(train_obj=self, construct=construct, key='times_1')
                     wrapped_model = x2ms_adapter.train_one_step_cell(wrapped_model, optim_register.get_instance())
                     for j in range(0, len(er_vocab_pairs), self.batch_size):
                         try:
@@ -242,11 +242,11 @@ class Experiment:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, default="FB-AUTO", nargs="?", help="FB-AUTO/JF17K/WikiPeople/WN18RR/FB15K-237.")
+    parser.add_argument("--dataset", type=str, default="JF17K", nargs="?", help="FB-AUTO/JF17K/WikiPeople/WN18RR/FB15K-237.")
     parser.add_argument("--num_iterations", type=int, default=1000, nargs="?", help="Number of iterations.")
-    parser.add_argument("--batch_size", type=int, default=128, nargs="?", help="Batch size.")
+    parser.add_argument("--batch_size", type=int, default=256, nargs="?", help="Batch size.")
     parser.add_argument("--lr", type=float, default=0.0005, nargs="?", help="Learning rate.")
-    parser.add_argument("--dr", type=float, default=0.99, nargs="?", help="Decay rate.")
+    parser.add_argument("--dr", type=float, default=0.995, nargs="?", help="Decay rate.")
     parser.add_argument("--dembed", type=int, default=400, nargs="?")
     parser.add_argument("--dembed1", type=int, default=50, nargs="?")
 
@@ -261,11 +261,11 @@ if __name__ == '__main__':
     
     ### n-ary数据集设置，例如FB-AUTO/JF17K/WikiPeople
     ## JF17K
-    # args.ary_list = [2, 3, 4, 5, 6]
+    args.ary_list = [2, 3, 4, 5, 6]
     ## WikiPeople
     # args.ary_list = [2, 3, 4, 5, 6, 7, 8, 9]
     ## FB-AUTO
-    args.ary_list = [2, 4, 5]
+    # args.ary_list = [2, 4, 5]
 
     param = {}
     param['dataset'] = args.dataset

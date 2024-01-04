@@ -1,5 +1,10 @@
-# -- coding: utf-8 --
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Nov 10 16:06:28 2023
 
+@author: Zhao Li
+# @File: The HJE Model
+"""
 import numpy as np
 import mindspore
 import mindspore.nn as nn
@@ -24,10 +29,10 @@ class MyLoss(nn.Cell):
         loss = -x2ms_adapter.tensor_api.x2ms_sum(x2ms_adapter.log(pred1[tar1 == 1]))
         return loss
 
-class HyConvE(BaseClass):
+class HJE(BaseClass):
 
     def __init__(self, n_ent, n_rel, emb_dim, emb_dim1, max_arity, device):
-        super(HyConvE, self).__init__()
+        super(HJE, self).__init__()
         self.loss = MyLoss()
         self.n_ent = n_ent
         self.n_rel = n_rel
@@ -50,8 +55,9 @@ class HyConvE(BaseClass):
         self.conv_layer_8 = x2ms_nn.Conv3d(in_channels=1, out_channels=8, kernel_size=(1, 1, 8))
         self.conv_layer_9 = x2ms_nn.Conv3d(in_channels=1, out_channels=8, kernel_size=(1, 1, 9))
         self.fc_rel_2 = x2ms_nn.Linear(in_features=self.emb_dim, out_features=16)
+        
         self.pool = torch.nn.MaxPool3d((4, 1, 1))
-        self.pool1d = x2ms_nn.MaxPool2d((1, 2))
+        self.pool2d = x2ms_nn.MaxPool2d((1, 2))
 
         self.inp_drop = x2ms_nn.Dropout(0.2)
         self.dropout = x2ms_nn.Dropout(0.2)
@@ -59,17 +65,17 @@ class HyConvE(BaseClass):
         self.dropout_2d = x2ms_nn.Dropout(0.3)
         self.nonlinear = x2ms_nn.ReLU()
         self.conv_size = (self.emb_dim1 * self.emb_dim2) * 8 // 4
-        self.conv_size_1d = (self.emb_dim) * 16 // 2
+        self.conv_size_2d = (self.emb_dim) * 16 // 2
         self.fc_layer = x2ms_nn.Linear(in_features=self.conv_size, out_features=self.emb_dim)
         self.W = mindspore.Parameter(x2ms_adapter.empty(size=(2 * emb_dim, emb_dim)))
-        self.fc_1 = x2ms_nn.Linear(in_features=1*self.conv_size_1d, out_features=self.conv_size)
-        self.fc_2 = x2ms_nn.Linear(in_features=2*self.conv_size_1d, out_features=self.conv_size)
-        self.fc_3 = x2ms_nn.Linear(in_features=3*self.conv_size_1d, out_features=self.conv_size)
-        self.fc_4 = x2ms_nn.Linear(in_features=4*self.conv_size_1d, out_features=self.conv_size)
-        self.fc_5 = x2ms_nn.Linear(in_features=5*self.conv_size_1d, out_features=self.conv_size)
-        self.fc_6 = x2ms_nn.Linear(in_features=6*self.conv_size_1d, out_features=self.conv_size)
-        self.fc_7 = x2ms_nn.Linear(in_features=7*self.conv_size_1d, out_features=self.conv_size)
-        self.fc_8 = x2ms_nn.Linear(in_features=8*self.conv_size_1d, out_features=self.conv_size)
+        self.fc_1 = x2ms_nn.Linear(in_features=1*self.conv_size_2d, out_features=self.conv_size)
+        self.fc_2 = x2ms_nn.Linear(in_features=2*self.conv_size_2d, out_features=self.conv_size)
+        self.fc_3 = x2ms_nn.Linear(in_features=3*self.conv_size_2d, out_features=self.conv_size)
+        self.fc_4 = x2ms_nn.Linear(in_features=4*self.conv_size_2d, out_features=self.conv_size)
+        self.fc_5 = x2ms_nn.Linear(in_features=5*self.conv_size_2d, out_features=self.conv_size)
+        self.fc_6 = x2ms_nn.Linear(in_features=6*self.conv_size_2d, out_features=self.conv_size)
+        self.fc_7 = x2ms_nn.Linear(in_features=7*self.conv_size_2d, out_features=self.conv_size)
+        self.fc_8 = x2ms_nn.Linear(in_features=8*self.conv_size_2d, out_features=self.conv_size)
 
         self.bn1 = nn.BatchNorm3d(num_features=1)
         self.bn2 = nn.BatchNorm3d(num_features=4)
@@ -240,12 +246,12 @@ class HyConvE(BaseClass):
 
         return x
 
-    def conv1d_process(self, concat_input):
+    def conv2d_process(self, concat_input):
         r = concat_input[:, 0, :]
         if concat_input.shape[1] == 2:
             e1 = concat_input[:, 1, :]
             x = self.convolve(e1, r)
-            x = self.pool1d(x)
+            x = self.pool2d(x)
             x = x2ms_adapter.tensor_api.view(x2ms_adapter.tensor_api.contiguous(x), e1.shape[0], -1)
             x = self.dropout(x)
             x = self.fc_1(x)
@@ -255,7 +261,7 @@ class HyConvE(BaseClass):
             conv_e1 = self.convolve(e1, r)
             conv_e2 = self.convolve(e2, r)
             x = x2ms_adapter.cat((conv_e1, conv_e2), dim=1)
-            x = self.pool1d(x)
+            x = self.pool2d(x)
             x = x2ms_adapter.tensor_api.view(x2ms_adapter.tensor_api.contiguous(x), e1.shape[0], -1)
             x = self.dropout(x)
             x = self.fc_2(x)
@@ -267,7 +273,7 @@ class HyConvE(BaseClass):
             conv_e2 = self.convolve(e2, r)
             conv_e3 = self.convolve(e3, r)
             x = x2ms_adapter.cat((conv_e1, conv_e2, conv_e3), dim=1)
-            x = self.pool1d(x)
+            x = self.pool2d(x)
             x = x2ms_adapter.tensor_api.view(x2ms_adapter.tensor_api.contiguous(x), e1.shape[0], -1)
             x = self.dropout(x)
             x = self.fc_3(x)
@@ -281,7 +287,7 @@ class HyConvE(BaseClass):
             conv_e3 = self.convolve(e3, r)
             conv_e4 = self.convolve(e4, r)
             x = x2ms_adapter.cat((conv_e1, conv_e2, conv_e3, conv_e4), dim=1)
-            x = self.pool1d(x)
+            x = self.pool2d(x)
             x = x2ms_adapter.tensor_api.view(x2ms_adapter.tensor_api.contiguous(x), e1.shape[0], -1)
             x = self.dropout(x)
             x = self.fc_4(x)
@@ -297,7 +303,7 @@ class HyConvE(BaseClass):
             conv_e4 = self.convolve(e4, r)
             conv_e5 = self.convolve(e5, r)
             x = x2ms_adapter.cat((conv_e1, conv_e2, conv_e3, conv_e4, conv_e5), dim=1)
-            x = self.pool1d(x)
+            x = self.pool2d(x)
             x = x2ms_adapter.tensor_api.view(x2ms_adapter.tensor_api.contiguous(x), e1.shape[0], -1)
             x = self.dropout(x)
             x = self.fc_5(x)
@@ -315,7 +321,7 @@ class HyConvE(BaseClass):
             conv_e5 = self.convolve(e5, r)
             conv_e6 = self.convolve(e6, r)
             x = x2ms_adapter.cat((conv_e1, conv_e2, conv_e3, conv_e4, conv_e5, conv_e6), dim=1)
-            x = self.pool1d(x)
+            x = self.pool2d(x)
             x = x2ms_adapter.tensor_api.view(x2ms_adapter.tensor_api.contiguous(x), e1.shape[0], -1)
             x = self.dropout(x)
             x = self.fc_6(x)
@@ -335,7 +341,7 @@ class HyConvE(BaseClass):
             conv_e6 = self.convolve(e6, r)
             conv_e7 = self.convolve(e7, r)
             x = x2ms_adapter.cat((conv_e1, conv_e2, conv_e3, conv_e4, conv_e5, conv_e6, conv_e7), dim=1)
-            x = self.pool1d(x)
+            x = self.pool2d(x)
             x = x2ms_adapter.tensor_api.view(x2ms_adapter.tensor_api.contiguous(x), e1.shape[0], -1)
             x = self.dropout(x)
             x = self.fc_7(x)
@@ -357,7 +363,7 @@ class HyConvE(BaseClass):
             conv_e7 = self.convolve(e7, r)
             conv_e8 = self.convolve(e8, r)
             x = x2ms_adapter.cat((conv_e1, conv_e2, conv_e3, conv_e4, conv_e5, conv_e6, conv_e7, conv_e8), dim=1)
-            x = self.pool1d(x)
+            x = self.pool2d(x)
             x = x2ms_adapter.tensor_api.view(x2ms_adapter.tensor_api.contiguous(x), e1.shape[0], -1)
             x = self.dropout(x)
             x = self.fc_8(x)
@@ -376,7 +382,7 @@ class HyConvE(BaseClass):
         concat_input = x2ms_adapter.cat((r, ents), dim=1)
 
         v1 = self.conv3d_process(concat_input)
-        v2 = self.conv1d_process(concat_input)
+        v2 = self.conv2d_process(concat_input)
         x = v1 + v2
         # x = v2
         # x = self.bn4(x)
