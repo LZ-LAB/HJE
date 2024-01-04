@@ -1,6 +1,8 @@
 File,Start Line,End Line,Api,Type,Tips
-main.py,97,97,torch.optim.lr_scheduler.ExponentialLR,UNSUPPORTED,"The corresponding api of ""torch.optim.lr_scheduler.ExponentialLR"" is ""mindspore.nn.exponential_decay_lr"", but has not been adapted in x2mindspore."
-model.py,55,55,torch.nn.MaxPool3d,UNSUPPORTED,"The corresponding api of ""torch.nn.MaxPool3d"" is ""mindspore.ops.MaxPool3D"", but has not been adapted in x2mindspore."
-model.py,76,76,torch.nn.BatchNorm3d,UNSUPPORTED,"""torch.nn.BatchNorm3d"" is not supported."
-model.py,77,77,torch.nn.BatchNorm3d,UNSUPPORTED,"""torch.nn.BatchNorm3d"" is not supported."
-model.py,81,81,torch.nn.Softplus,UNSUPPORTED,"""torch.nn.Softplus"" is not supported."
+main-WikiPeople.py,99,99,torch.optim.lr_scheduler.ExponentialLR,UNSUPPORTED,"The corresponding api of ""torch.optim.lr_scheduler.ExponentialLR"" is ""mindspore.nn.exponential_decay_lr"", but has not been adapted in x2mindspore."
+model.py,59,59,torch.nn.MaxPool3d,UNSUPPORTED,"The corresponding api of ""torch.nn.MaxPool3d"" is ""mindspore.ops.MaxPool3D"", but has not been adapted in x2mindspore."
+model.py,80,80,torch.nn.BatchNorm3d,UNSUPPORTED,"""torch.nn.BatchNorm3d"" is not supported."
+model.py,81,81,torch.nn.BatchNorm3d,UNSUPPORTED,"""torch.nn.BatchNorm3d"" is not supported."
+model.py,85,85,torch.nn.Softplus,UNSUPPORTED,"""torch.nn.Softplus"" is not supported."
+main-JF17K.py,99,99,torch.optim.lr_scheduler.ExponentialLR,UNSUPPORTED,"The corresponding api of ""torch.optim.lr_scheduler.ExponentialLR"" is ""mindspore.nn.exponential_decay_lr"", but has not been adapted in x2mindspore."
+main-FB-AUTO.py,99,99,torch.optim.lr_scheduler.ExponentialLR,UNSUPPORTED,"The corresponding api of ""torch.optim.lr_scheduler.ExponentialLR"" is ""mindspore.nn.exponential_decay_lr"", but has not been adapted in x2mindspore."

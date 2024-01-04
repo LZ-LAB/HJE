@@ -1,3 +1,7 @@
 File,Start Line,End Line,Api,Type,Tips
-main.py,148,148,torch.no_grad,DELETED,"""torch.no_grad"" has no corresponding api in MindSpore, will be deleted by x2mindspore."
-main.py,239,239,torch.backends.cudnn.deterministic,DELETED,"""torch.backends.cudnn.deterministic"" has no corresponding api in MindSpore, will be deleted by x2mindspore."
+main-WikiPeople.py,150,150,torch.no_grad,DELETED,"""torch.no_grad"" has no corresponding api in MindSpore, will be deleted by x2mindspore."
+main-WikiPeople.py,249,249,torch.backends.cudnn.deterministic,DELETED,"""torch.backends.cudnn.deterministic"" has no corresponding api in MindSpore, will be deleted by x2mindspore."
+main-JF17K.py,150,150,torch.no_grad,DELETED,"""torch.no_grad"" has no corresponding api in MindSpore, will be deleted by x2mindspore."
+main-JF17K.py,249,249,torch.backends.cudnn.deterministic,DELETED,"""torch.backends.cudnn.deterministic"" has no corresponding api in MindSpore, will be deleted by x2mindspore."
+main-FB-AUTO.py,150,150,torch.no_grad,DELETED,"""torch.no_grad"" has no corresponding api in MindSpore, will be deleted by x2mindspore."
+main-FB-AUTO.py,249,249,torch.backends.cudnn.deterministic,DELETED,"""torch.backends.cudnn.deterministic"" has no corresponding api in MindSpore, will be deleted by x2mindspore."

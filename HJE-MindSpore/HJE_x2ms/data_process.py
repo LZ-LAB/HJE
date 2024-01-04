@@ -29,7 +29,7 @@ class Data:
         train_strfacts, valid_strfacts, test_strfacts =  [], [], []
         ent_list, rel_list = [], []
         max_ary = 0
-        if dataset in ['JF17K', 'FB-AUTO', 'wn18rr', 'FB15k-237', 'WikiPeople-3', 'WikiPeople-4', 'JF17K-3', 'JF17K-4']:
+        if dataset in ['JF17K', 'FB-AUTO', 'WikiPeople1', 'WN18RR', 'FB15K-237', 'WikiPeople-3', 'WikiPeople-4', 'JF17K-3', 'JF17K-4']:
             for filename in ['train', 'valid', 'test']:
                 with open(data_dir+filename+'.txt', 'r') as f:
                     lines = f.readlines()
@@ -75,7 +75,7 @@ class Data:
                     tmp_fact = [tmp_rel] + tmp_fact
                     rel_list.append(tmp_rel)
                     eval(filename+'_strfacts').append(tmp_fact)
-        elif dataset in ['WN18', 'FB15k']:
+        elif dataset in ['WN18', 'FB15K']:
             for filename in ['train', 'valid', 'test']:
                 with open(data_dir+filename+'.txt', 'r') as f:
                     lines = f.readlines()
