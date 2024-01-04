@@ -1,8 +1,5 @@
 # -- coding: utf-8 --
-# @Time: 2022-10-20 16:09
-# @Author: WangCx
-# @File: model
-# @Project: hyperformer
+
 import numpy as np
 import mindspore
 import mindspore.nn as nn
