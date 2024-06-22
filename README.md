@@ -25,7 +25,7 @@ It is worth stating that **dropout, dropout_3d, and dropout_2d** are also hyperp
 ## Citation
 If you use this package for published work, please cite the following paper:
 ```
-@article{li2024hje,
+@article{HJE,
   title={HJE: Joint Convolutional Representation Learning for Knowledge Hypergraph Completion},
   author={Li, Zhao and Wang, Chenxu and Wang, Xin and Chen, Zirui and Li, Jianxin},
   journal={IEEE Transactions on Knowledge and Data Engineering},
