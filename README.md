@@ -21,3 +21,15 @@ We support flexible settings of hyperparameters that have an impact on the train
 python main-FB-AUTO.py --num_iterations 1000 --batch_size 128 --lr 0.0005 --dr 0.99
 ```
 It is worth stating that **dropout, dropout_3d, and dropout_2d** are also hyperparameters that have an impact on the final performance of the model, and to simplify the open-source code for the reader to follow, we set these four hyperparameters as fixed values in **model.py**. Nevertheless, the default values we provide for the other parameters still achieve the results reported in the paper within the error margins. In other words, in different datasets, the reader can easily better the experimental results reported in the original paper by additionally adjusting specific hyperparameter values for different **dropout, dropout_3d, and dropout_2d**.
+
+## Citation
+If you use this package for published work, please cite the following paper:
+```
+@article{li2024hje,
+  title={HJE: Joint Convolutional Representation Learning for Knowledge Hypergraph Completion},
+  author={Li, Zhao and Wang, Chenxu and Wang, Xin and Chen, Zirui and Li, Jianxin},
+  journal={IEEE Transactions on Knowledge and Data Engineering},
+  year={2024},
+  publisher={IEEE}
+}
+```
