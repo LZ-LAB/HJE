@@ -30,6 +30,11 @@ If you use this package for published work, please cite the following paper:
   author={Li, Zhao and Wang, Chenxu and Wang, Xin and Chen, Zirui and Li, Jianxin},
   journal={IEEE Transactions on Knowledge and Data Engineering},
   year={2024},
+  volume={36},
+  number={8},
+  pages={3879-3892},
   publisher={IEEE}
 }
+
+Li Z, Wang C, Wang X, et al. HJE: Joint Convolutional Representation Learning for Knowledge Hypergraph Completion[J]. IEEE Transactions on Knowledge and Data Engineering, 2024, 36(8): 3879-3892.
 ```
