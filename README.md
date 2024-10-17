@@ -1,5 +1,5 @@
 # The HJE Model
-This paper has been submitted to the IEEE TKDE journal.
+This paper has been submitted to the IEEE Transactions on Knowledge and Data Engineering (IEEE TKDE) journal.
 ## Requirements
 The version of Python and major packages needed to run the code:
    
