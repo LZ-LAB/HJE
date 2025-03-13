@@ -32,7 +32,7 @@ If you use this package for published work, please cite the following paper:
   year={2024},
   volume={36},
   number={8},
-  pages={3879-3892},
+  pages={3879--3892},
   publisher={IEEE}
 }
 
